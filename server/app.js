@@ -1,11 +1,17 @@
+require('dotenv').config();
 const Express = require('express');
 const app = Express();
 const dbConnection = require('./db');
 
+app.use(Express.json());
+
 const controllers = require('./controllers');
 
+// app.use(middleware.headers);
+app.use(require("./middleware/validate-jwt"));
 app.use('/journal', controllers.journalController);
 app.use('/user', controllers.userController);
+
 
 dbConnection.authenticate()
     .then(() => dbConnection.sync())
